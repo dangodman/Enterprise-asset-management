@@ -46,9 +46,21 @@ const routes = [
     },
 ];
 
+
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+router.beforeEach((to,from,next) => {
+  document.title = to.meta.title;
+  let token = localStorage.getItem('token');
+  if(to.path !=='/login' && !token){
+    next('/login')
+  }else {
+    next()
+  }
+})
+
 
 export default router;

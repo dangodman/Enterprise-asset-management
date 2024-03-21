@@ -37,12 +37,13 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
+import { login } from "../api/user.js";
 const router = useRouter();
 const ruleFormRef = ref();
 
 const checkUsername = (rule, value, callback) => {
-  if (!value) {
-    return callback(new Error("请输入账号"));
+  if (value === "") {
+    callback(new Error("请输入账号"));
   }
 };
 
@@ -63,14 +64,23 @@ const rules = reactive({
 });
 
 const submitForm = (formEl) => {
-  if (!formEl.username || !formEl.pass) return;
-  console.log(formEl);
-  router.push("/index");
-};
-
-const resetForm = (formEl) => {
-  if (!formEl) return;
-  formEl.resetFields();
+  if (!formEl.username || !formEl.pass) {
+    return ElMessage.error("请输入账号和密码");
+  } else {
+    login(formEl).then((res) => {
+      console.log(res);
+      localStorage.setItem("token", res.token);
+      if (res.code == 0) {
+        setTimeout(() => {
+          ElMessage({
+            message: "登录成功",
+            type: "success",
+          });
+          router.push("/index");
+        }, 500);
+      }
+    });
+  }
 };
 </script>
 
