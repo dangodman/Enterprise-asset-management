@@ -34,8 +34,19 @@
     </div>
     <div class="fixed-table">
       <el-table :data="filterTableData" style="width: 100%">
-        <el-table-column label="Date" prop="date" />
-        <el-table-column label="Name" prop="name" />
+        <el-table-column label="资产id" prop="id" />
+        <el-table-column label="资产名称" prop="name" />
+        <el-table-column label="资产类型" prop="type" />
+        <el-table-column label="图片">
+          <template #default="scope">
+            <div style="display: flex; align-items: center">
+              <img style="width: 100px; height: 100px" :src="scope.row.image" />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="资产数量" prop="number" />
+        <el-table-column label="总计价格(万元)" prop="price" />
+        <el-table-column label="状态" prop="state" />
         <el-table-column align="right">
           <template #header>
             <el-input
@@ -70,8 +81,9 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { reactive } from "vue";
+import { fixedList } from "../api/user.js";
 
 const formInline = reactive({
   user: "",
@@ -84,7 +96,7 @@ const onSubmit = () => {
 };
 const search = ref("");
 const filterTableData = computed(() =>
-  tableData.filter(
+  tableData.value.filter(
     (data) =>
       !search.value ||
       data.name.toLowerCase().includes(search.value.toLowerCase())
@@ -96,29 +108,11 @@ const handleEdit = (index, row) => {
 const handleDelete = (index, row) => {
   console.log(index, row);
 };
-
-const tableData = [
-  {
-    date: "2016-05-03",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    date: "2016-05-02",
-    name: "John",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    date: "2016-05-04",
-    name: "Morgan",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    date: "2016-05-01",
-    name: "Jessy",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-];
+let tableData = ref([]);
+onMounted(async () => {
+  const { data } = await fixedList();
+  tableData.value = data;
+});
 </script>
 <style lang="less" scoped>
 .fixed-container {

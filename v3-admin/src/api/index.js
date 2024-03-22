@@ -5,23 +5,27 @@ axios.defaults.timeout = 5000;
 
 axios.interceptors.request.use((config) => {
   let token = localStorage.getItem("token");
-  if(token) {
+  if (token) {
     config.headers.Authorization = token;
   }
   return config;
 });
 
 axios.interceptors.response.use((res) => {
-  if (res.data.code && res.data.code !== 0) {
-    return Promise.reject(res.data.error);
-    if (res.data.status >= 400 && res.data.status < 500) {
+    if (res.status >= 400 && res.status < 500) {
       router.push("/login");
       return Promise.reject(res.data);
     }
-  }
+  console.log("1111");
+  console.log(res);
+  console.log("2222");
   return res;
 });
 
 export function post(url, body) {
   return axios.post(url, body).then((res) => res.data);
+}
+
+export function get(url) {
+  return axios.get(url).then((res) => res.data);
 }

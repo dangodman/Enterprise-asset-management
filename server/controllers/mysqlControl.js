@@ -37,8 +37,14 @@ const product = () => {
   return allService.query(_sql);
 };
 
+const fixedList = () => {
+  let _sql = `select * from fixed`;
+  return allService.query(_sql);
+}
+
 
 module.exports = {
-  product
+  product,
+  fixedList
 }
 

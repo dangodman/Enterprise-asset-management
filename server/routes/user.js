@@ -1,5 +1,6 @@
 const router = require("koa-router")();
 const jwt = require('../utils/jwt.js')
+const  { fixedList }  = require('../controllers/mysqlControl.js');
 
 router.post("/login", (ctx) => {
   let user = ctx.request.body; // 获取到前端传过来的参数
@@ -23,6 +24,32 @@ router.post("/login", (ctx) => {
     }
   }
 });
+
+router.get("/fixed", async (ctx) => {
+  try {
+    const result = await fixedList();
+    console.log(result);
+    if (result) {
+      ctx.body = {
+        code: "200",
+        data: result,
+      };
+    } else {
+      ctx.body = {
+        code: "8005",
+        data: null,
+        msg: "获取失败",
+      };
+    }
+  } catch (err) {
+    ctx.body = {
+      code: "8005",
+      data: err,
+      msg: "服务器异常",
+    };
+  }
+});
+
 
 
 module.exports = router;
