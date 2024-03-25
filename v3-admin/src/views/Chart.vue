@@ -11,19 +11,19 @@
       </div>
       <div class="total-box">
         <span class="total-number">20</span>
-        <span class="total-text">固定资产</span>
+        <span class="total-text">流动资产</span>
       </div>
       <div class="total-box">
         <span class="total-number">20</span>
-        <span class="total-text">固定资产</span>
+        <span class="total-text">资产维护</span>
       </div>
       <div class="total-box">
         <span class="total-number">20</span>
-        <span class="total-text">固定资产</span>
+        <span class="total-text">报废资产</span>
       </div>
       <div class="total-box">
         <span class="total-number">20</span>
-        <span class="total-text">固定资产</span>
+        <span class="total-text">企业员工</span>
       </div>
     </div>
   </div>

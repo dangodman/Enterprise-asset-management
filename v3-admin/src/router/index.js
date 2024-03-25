@@ -22,7 +22,7 @@ const routes = [
             name:"chart",
             component: () => import("../views/Chart.vue"),
             meta:{
-                title: "图表",
+                title: "首页",
             }
         },
         // 运输工具
@@ -31,7 +31,7 @@ const routes = [
             name:"fixed",
             component: () => import("../views/Fixed.vue"),
             meta:{
-                title: "运输工具",
+                title: "固定资产",
             }
         },
       ]
