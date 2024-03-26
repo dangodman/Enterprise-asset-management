@@ -24,7 +24,9 @@
             <router-link to="/index/fixed"
               ><el-menu-item index="2-1">固定资产</el-menu-item></router-link
             >
-            <el-menu-item index="2-2">流动资产</el-menu-item>
+            <router-link to="/index/current"
+              ><el-menu-item index="2-2">流动资产</el-menu-item></router-link
+            >
           </el-sub-menu>
           <el-sub-menu index="3">
             <template #title>
