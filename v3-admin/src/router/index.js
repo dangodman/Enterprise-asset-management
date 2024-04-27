@@ -41,6 +41,14 @@ const routes = [
           title: "流动资产",
         },
       },
+      {
+        path: "maintenanceInformation",
+        name: "maintenanceInformation",
+        component: () => import("../views/assetMaintenance/MaintenInfor.vue"),
+        meta: {
+          title: "维修信息登记",
+        },
+      },
     ],
   },
   {

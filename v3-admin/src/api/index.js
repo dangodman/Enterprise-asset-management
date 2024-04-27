@@ -12,13 +12,10 @@ axios.interceptors.request.use((config) => {
 });
 
 axios.interceptors.response.use((res) => {
-    if (res.status >= 400 && res.status < 500) {
-      router.push("/login");
-      return Promise.reject(res.data);
-    }
-  console.log("1111");
-  console.log(res);
-  console.log("2222");
+  if (res.status >= 400 && res.status < 500) {
+    router.push("/login");
+    return Promise.reject(res.data);
+  }
   return res;
 });
 
@@ -29,3 +26,5 @@ export function post(url, body) {
 export function get(url) {
   return axios.get(url).then((res) => res.data);
 }
+
+
