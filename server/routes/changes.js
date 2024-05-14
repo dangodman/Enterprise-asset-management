@@ -1,14 +1,14 @@
 const router = require("koa-router")();
 const {
-  repairList,
-  addRepair,
-  updateRepair,
-  deleteRepair,
+  changeList,
+  addChanges,
+  updateChanges,
+  deleteChanges,
 } = require("../controllers/mysqlControl.js");
- 
-router.get("/repairList", async (ctx) => {
+
+router.get("/changeList", async (ctx) => {
   try {
-    const result = await repairList();
+    const result = await changeList();
     console.log(result);
     if (result) {
       ctx.body = {
@@ -31,10 +31,10 @@ router.get("/repairList", async (ctx) => {
   }
 });
 
-router.post("/addRepair", async (ctx) => {
+router.post("/addChanges", async (ctx) => {
   let data = ctx.request.body;
   try {
-    const result = await addRepair(data);
+    const result = await addChanges(data);
     if (result) {
       ctx.body = {
         code: "200",
@@ -56,10 +56,10 @@ router.post("/addRepair", async (ctx) => {
   }
 });
 
-router.post("/updateRepair", async (ctx) => {
+router.post("/updateChanges", async (ctx) => {
   let data = ctx.request.body;
   try {
-    const result = await updateRepair(data);
+    const result = await updateChanges(data);
     if (result) {
       ctx.body = {
         code: "200",
@@ -81,10 +81,10 @@ router.post("/updateRepair", async (ctx) => {
   }
 });
 
-router.post("/deleteRepair", async (ctx) => {
+router.post("/deleteChanges", async (ctx) => {
   let data = ctx.request.body;
   try {
-    const result = await deleteRepair(data);
+    const result = await deleteChanges(data);
     if (result) {
       ctx.body = {
         code: "200",

@@ -27,6 +27,9 @@
             <router-link to="/index/current"
               ><el-menu-item index="2-2">流动资产</el-menu-item></router-link
             >
+            <router-link to="/index/assetAcquisition"
+              ><el-menu-item index="2-3">领用&入库</el-menu-item></router-link
+            >
           </el-sub-menu>
           <el-sub-menu index="3">
             <template #title>
@@ -35,7 +38,9 @@
             <router-link to="/index/maintenanceInformation"
               ><el-menu-item index="3-1">维修信息登记</el-menu-item></router-link
             >
-            
+            <router-link to="/index/changeInformation"
+              ><el-menu-item index="3-2">实物信息变更</el-menu-item></router-link
+            >
           </el-sub-menu>
           <el-sub-menu index="4">
             <template #title>

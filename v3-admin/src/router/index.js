@@ -49,6 +49,22 @@ const routes = [
           title: "维修信息登记",
         },
       },
+      {
+        path: "assetAcquisition",
+        name: "assetAcquisition",
+        component: () => import("../views/assetAcquisition/Acquisition.vue"),
+        meta: {
+          title: "领用&退库",
+        },
+      },
+      {
+        path: "changeInformation",
+        name: "changeInformation",
+        component: () => import("../views/informationChanges/Changes.vue"),
+        meta: {
+          title: "实物信息变更",
+        },
+      },
     ],
   },
   {
