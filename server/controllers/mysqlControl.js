@@ -108,6 +108,48 @@ const deleteChanges = (params) => {
   let _sql = `delete from changes where id=${params.id}`;
   return allService.query(_sql);
 };
+
+// 获取所有员工信息
+const employeeList = () => {
+  let _sql = `select * from employee`;
+  return allService.query(_sql);
+};
+// 添加一个员工信息
+const addEmployee = (params) => {
+  let _sql = `insert into employee(name, sex, age, phone, department, position, salary) values('${params.name}','${params.sex}','${params.age}','${params.phone}','${params.department}','${params.position}','${params.salary}')`;
+  return allService.query(_sql);
+};
+// 通过id修改员工信息
+const updateEmployee = (params) => {
+  let _sql = `update employee set name='${params.name}',sex='${params.sex}',age='${params.age}',phone='${params.phone}',department='${params.department}',position='${params.position}',salary='${params.salary}' where id=${params.id}`;
+  return allService.query(_sql);
+};
+// 通过id删除一个员工信息
+const deleteEmployee = (params) => {
+  let _sql = `delete from employee where id=${params.id}`;
+  return allService.query(_sql);
+};
+// 获取所有离职信息
+const leaveList = () => {
+  let _sql = `select * from leaves`;
+  return allService.query(_sql);
+};
+// 添加一个离职信息
+const addLeave = (params) => {
+  let _sql = `insert into leaves(name, sex, age, phone, department, position, reason) values('${params.name}','${params.sex}','${params.age}','${params.phone}','${params.department}','${params.position}','${params.reason}')`;
+  return allService.query(_sql);
+}
+// 通过id修改离职信息
+const updateLeave = (params) => {
+  let _sql = `update leaves set name='${params.name}',sex='${params.sex}',age='${params.age}',phone='${params.phone}',department='${params.department}',position='${params.position}',reason='${params.reason}' where id=${params.id}`;
+  return allService.query(_sql);
+};
+// 通过id删除一个离职信息
+const deleteLeave = (params) => {
+  let _sql = `delete from leaves where id=${params.id}`;
+  return allService.query(_sql);
+};
+
 module.exports = {
   product,
   fixedList,
@@ -123,4 +165,12 @@ module.exports = {
   addChanges,
   updateChanges,
   deleteChanges,
+  employeeList,
+  addEmployee,
+  updateEmployee,
+  deleteEmployee,
+  leaveList,
+  addLeave,
+  updateLeave,
+  deleteLeave,
 };

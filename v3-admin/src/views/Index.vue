@@ -36,10 +36,14 @@
               <el-icon><setting /></el-icon>资产维护
             </template>
             <router-link to="/index/maintenanceInformation"
-              ><el-menu-item index="3-1">维修信息登记</el-menu-item></router-link
+              ><el-menu-item index="3-1"
+                >维修信息登记</el-menu-item
+              ></router-link
             >
             <router-link to="/index/changeInformation"
-              ><el-menu-item index="3-2">实物信息变更</el-menu-item></router-link
+              ><el-menu-item index="3-2"
+                >实物信息变更</el-menu-item
+              ></router-link
             >
           </el-sub-menu>
           <el-sub-menu index="4">
@@ -51,6 +55,16 @@
             <template #title>
               <el-icon><setting /></el-icon>员工管理
             </template>
+            <router-link to="/index/employees"
+              ><el-menu-item index="5-1"
+                >在职员工信息</el-menu-item
+              ></router-link
+            >
+            <router-link to="/index/leave"
+              ><el-menu-item index="5-2"
+                >离职员工信息</el-menu-item
+              ></router-link
+            >
           </el-sub-menu>
         </el-menu>
       </el-scrollbar>

@@ -22,17 +22,13 @@
         @cell-dblclick="cellDBLClickEvent"
       >
         <vxe-column type="seq" width="60"></vxe-column>
-        <vxe-column field="state" title="办理状态"></vxe-column>
-        <vxe-column field="orderNumber" title="维修单号"></vxe-column>
-        <vxe-column field="date" title="业务日期">
-          <template #default="{ row }">
-            {{ row.date.slice(0, 10) }}
-          </template>
-        </vxe-column>
-        <vxe-column field="people" title="使用人"></vxe-column>
-        <vxe-column field="processor" title="处理人"></vxe-column>
-        <vxe-column field="name" title="资产名称"></vxe-column>
-        <vxe-column field="remark" title="备注"></vxe-column>
+        <vxe-column field="name" title="姓名"></vxe-column>
+        <vxe-column field="sex" title="性别"></vxe-column>
+        <vxe-column field="age" title="年龄"></vxe-column>
+        <vxe-column field="phone" title="联系电话"></vxe-column>
+        <vxe-column field="department" title="所属部门"></vxe-column>
+        <vxe-column field="position" title="职位"></vxe-column>
+        <vxe-column field="salary" title="薪资(万元)"></vxe-column>
         <vxe-column title="操作" width="100" show-overflow>
           <template #default="{ row }">
             <vxe-button
@@ -68,13 +64,26 @@
             @submit="submitEvent"
           >
             <vxe-form-item
-              field="state"
-              title="办理状态"
+              field="name"
+              title="姓名"
               :span="12"
               :item-render="{}"
             >
               <template #default="{ data }">
-                <vxe-select v-model="data.state" transfer>
+                <vxe-input
+                  v-model="data.name"
+                  placeholder="请输入姓名"
+                ></vxe-input>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item
+              field="sex"
+              title="性别"
+              :span="12"
+              :item-render="{}"
+            >
+              <template #default="{ data }">
+                <vxe-select v-model="data.sex" transfer>
                   <vxe-option
                     v-for="item in stateList"
                     :key="item.value"
@@ -84,85 +93,69 @@
                 </vxe-select>
               </template>
             </vxe-form-item>
+
             <vxe-form-item
-              field="orderNumber"
-              title="维修单号"
+              field="age"
+              title="年龄"
               :span="12"
               :item-render="{}"
             >
               <template #default="{ data }">
                 <vxe-input
-                  v-model="data.orderNumber"
-                  placeholder="请输入维修单号"
+                  v-model="data.age"
+                  placeholder="请输入年龄"
                 ></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item
-              field="date"
-              title="维修日期"
+              field="phone"
+              title="联系方式"
               :span="12"
               :item-render="{}"
             >
               <template #default="{ data }">
                 <vxe-input
-                  v-model="data.date"
-                  type="date"
-                  placeholder="请选择日期"
-                  transfer
+                  v-model="data.phone"
+                  placeholder="请输入联系电话"
                 ></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item
-              field="people"
-              title="使用人"
+              field="department"
+              title="所属部门"
               :span="12"
               :item-render="{}"
             >
               <template #default="{ data }">
                 <vxe-input
-                  v-model="data.people"
-                  placeholder="请输入领用人"
+                  v-model="data.department"
+                  placeholder="请输入所属部门"
                 ></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item
-              field="processor"
-              title="处理人"
+              field="position"
+              title="职位"
               :span="12"
               :item-render="{}"
             >
               <template #default="{ data }">
                 <vxe-input
-                  v-model="data.processor"
-                  placeholder="请输入处理人"
+                  v-model="data.position"
+                  placeholder="请输入职位"
                 ></vxe-input>
               </template>
             </vxe-form-item>
             <vxe-form-item
-              field="name"
-              title="资产名称"
+              field="salary"
+              title="薪资"
               :span="12"
               :item-render="{}"
             >
               <template #default="{ data }">
                 <vxe-input
-                  v-model="data.name"
-                  placeholder="请输入资产名称"
-                ></vxe-input>
-              </template>
-            </vxe-form-item>
-            <vxe-form-item
-              field="remark"
-              title="备注"
-              :span="24"
-              :item-render="{}"
-            >
-              <template #default="{ data }">
-                <vxe-input
-                  v-model="data.remark"
-                  placeholder="请输入备注"
-                  type="textarea"
-                  :autosize="{ minRows: 2, maxRows: 4 }"
+                  v-model="data.salary"
+                  placeholder="请输入薪资"
                 ></vxe-input>
               </template>
             </vxe-form-item>
@@ -202,66 +195,72 @@
 import { reactive, ref, onMounted, inject } from "vue";
 import { VXETable } from "vxe-table";
 import {
-  changesList,
-  changesAdd,
-  changesEdit,
-  changesDelete,
-} from "../../api/changes.js";
+  employeesList,
+  employeesAdd,
+  employeesEdit,
+  employeesDelete,
+} from "../../api/employee.js";
 let key = inject("key");
 const xTable = ref();
 const list = ref();
 const formData = reactive({
-  state: "",
-  orderNumber: "",
-  date: "",
-  people: "",
-  processor: "",
   name: "",
-  remark: "",
+  sex: "",
+  age: "",
+  phone: "",
+  department: "",
+  position: "",
+  salary: "",
 });
 const submitLoading = ref(false);
 const showEdit = ref(false);
 const selectRow = ref();
 const tableData = ref([]);
 const stateList = ref([
-  { label: "成功", value: "成功" },
-  { label: "取消", value: "取消" },
+  { label: "男", value: "男" },
+  { label: "女", value: "女" },
 ]);
 const formRules = reactive({
-  state: [
+  name: [
     {
       required: true,
-      message: "请选择办理状态",
+      message: "请输入姓名",
     },
   ],
-  orderNumber: [
+  sex: [
     {
       required: true,
-      message: "请输入维修单号",
+      message: "请选择性别",
     },
   ],
-  date: [
+  age: [
     {
       required: true,
-      message: "请选择维修日期",
+      message: "请输入年龄",
     },
   ],
-  processor: [
+  phone: [
     {
       required: true,
-      message: "请输入处理人",
+      message: "请输入联系电话",
     },
   ],
-  people: [
+  department: [
     {
       required: true,
-      message: "请输入领用人",
+      message: "请输入所属部门",
     },
   ],
-  remark: [
+  position: [
     {
       required: true,
-      message: "请输入备注",
+      message: "请输入职位",
+    },
+  ],
+  salary: [
+    {
+      required: true,
+      message: "请输入薪资",
     },
   ],
 });
@@ -280,7 +279,7 @@ const cellDBLClickEvent = ({ row }) => {
 const removeEvent = async (row) => {
   const type = await VXETable.modal.confirm("您确定要删除该数据?");
   if (type === "confirm") {
-    const data = await changesDelete(row);
+    const data = await employeesDelete(row);
     if (data.code === "200") {
       VXETable.modal.message({ content: "删除成功", status: "success" });
       key.value++;
@@ -290,7 +289,7 @@ const removeEvent = async (row) => {
 const submitEvent = async () => {
   submitLoading.value = true;
   if (selectRow.value) {
-    const data = await changesEdit(formData);
+    const data = await employeesEdit(formData);
     if (data.code === "200") {
       submitLoading.value = false;
       showEdit.value = false;
@@ -298,7 +297,7 @@ const submitEvent = async () => {
       key.value++;
     }
   } else {
-    const data = await changesAdd(formData);
+    const data = await employeesAdd(formData);
     if (data.code === "200") {
       submitLoading.value = false;
       showEdit.value = false;
@@ -308,7 +307,7 @@ const submitEvent = async () => {
   }
 };
 onMounted(async () => {
-  const { data } = await changesList();
+  const { data } = await employeesList();
   tableData.value = data.slice(0, pageVO2.pageSize - 1);
   pageVO2.total = data.length;
   console.log("数据", data);

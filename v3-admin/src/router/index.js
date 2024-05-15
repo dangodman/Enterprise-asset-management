@@ -65,6 +65,22 @@ const routes = [
           title: "实物信息变更",
         },
       },
+      {
+        path: "employees",
+        name: "employees",
+        component: () => import("../views/employeeManagement/Employee.vue"),
+        meta: {
+          title: "在职员工信息",
+        },
+      },
+      {
+        path: "leave",
+        name: "leave",
+        component: () => import("../views/employeeManagement/Leave.vue"),
+        meta: {
+          title: "离职员工信息",
+        },
+      },
     ],
   },
   {

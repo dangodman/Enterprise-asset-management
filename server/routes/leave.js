@@ -1,14 +1,14 @@
 const router = require("koa-router")();
 const {
-  changeList,
-  addChanges,
-  updateChanges,
-  deleteChanges,
+  leaveList,
+  addLeave,
+  updateLeave,
+  deleteLeave,
 } = require("../controllers/mysqlControl.js");
 
-router.get("/changeList", async (ctx) => {
+router.get("/leave", async (ctx) => {
   try {
-    const result = await changeList();
+    const result = await leaveList();
     if (result) {
       ctx.body = {
         code: "200",
@@ -30,10 +30,10 @@ router.get("/changeList", async (ctx) => {
   }
 });
 
-router.post("/addChanges", async (ctx) => {
+router.post("/addLeave", async (ctx) => {
   let data = ctx.request.body;
   try {
-    const result = await addChanges(data);
+    const result = await addLeave(data);
     if (result) {
       ctx.body = {
         code: "200",
@@ -55,10 +55,10 @@ router.post("/addChanges", async (ctx) => {
   }
 });
 
-router.post("/updateChanges", async (ctx) => {
+router.post("/updateLeave", async (ctx) => {
   let data = ctx.request.body;
   try {
-    const result = await updateChanges(data);
+    const result = await updateLeave(data);
     if (result) {
       ctx.body = {
         code: "200",
@@ -80,10 +80,10 @@ router.post("/updateChanges", async (ctx) => {
   }
 });
 
-router.post("/deleteChanges", async (ctx) => {
+router.post("/deleteLeave", async (ctx) => {
   let data = ctx.request.body;
   try {
-    const result = await deleteChanges(data);
+    const result = await deleteLeave(data);
     if (result) {
       ctx.body = {
         code: "200",
@@ -104,4 +104,5 @@ router.post("/deleteChanges", async (ctx) => {
     };
   }
 });
+
 module.exports = router;

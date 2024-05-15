@@ -1,144 +1,333 @@
 <template>
-  <div class="fixed-container">
-    <div class="fixed-form">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline">
-        <el-form-item label="Approved by">
-          <el-input
-            v-model="formInline.user"
-            placeholder="Approved by"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="Activity zone">
-          <el-select
-            v-model="formInline.region"
-            placeholder="Activity zone"
-            clearable
+  <div class="container">
+    <div>
+      <vxe-toolbar>
+        <template #buttons>
+          <vxe-button
+            status="primary"
+            icon="vxe-icon-square-plus"
+            @click="insertEvent()"
+            >新增</vxe-button
           >
-            <el-option label="Zone one" value="shanghai" />
-            <el-option label="Zone two" value="beijing" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="Activity time">
-          <el-date-picker
-            v-model="formInline.date"
-            type="date"
-            placeholder="Pick a date"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="onSubmit">Query</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    <div class="fixed-table">
-      <el-table :data="filterTableData" style="width: 100%">
-        <el-table-column label="资产id" prop="id" />
-        <el-table-column label="资产名称" prop="name" />
-        <el-table-column label="资产类型" prop="type" />
-        <el-table-column label="图片">
-          <template #default="scope">
-            <div style="display: flex; align-items: center">
-              <img style="width: 100px; height: 100px" :src="scope.row.image" />
-            </div>
+        </template>
+      </vxe-toolbar>
+
+      <vxe-table
+        border
+        show-overflow
+        ref="xTable"
+        :column-config="{ resizable: true }"
+        :row-config="{ isHover: true }"
+        :data="tableData"
+        @cell-dblclick="cellDBLClickEvent"
+      >
+        <vxe-column type="seq" width="100"></vxe-column>
+        <vxe-column field="name" title="资产名称"></vxe-column>
+        <vxe-column field="type" title="资产类型"></vxe-column>
+        <vxe-column field="price" title="资产价格"></vxe-column>
+        <vxe-column field="number" title="资产数量"></vxe-column>
+        <vxe-column field="state" title="资产状态"></vxe-column>
+        <vxe-column title="操作" width="100" show-overflow>
+          <template #default="{ row }">
+            <vxe-button
+              type="text"
+              icon="vxe-icon-edit"
+              @click="editEvent(row)"
+            ></vxe-button>
+            <vxe-button
+              type="text"
+              icon="vxe-icon-delete"
+              @click="removeEvent(row)"
+            ></vxe-button>
           </template>
-        </el-table-column>
-        <el-table-column label="资产数量" prop="number" />
-        <el-table-column label="总计价格(万元)" prop="price" />
-        <el-table-column label="状态" prop="state" />
-        <el-table-column align="right">
-          <template #header>
-            <el-input
-              v-model="search"
-              size="default"
-              placeholder="Type to search"
-            />
-          </template>
-          <template #default="scope">
-            <el-button
-              size="default"
-              @click="handleEdit(scope.$index, scope.row)"
-              >Edit</el-button
+        </vxe-column>
+      </vxe-table>
+
+      <vxe-modal
+        v-model="showEdit"
+        :title="selectRow ? '编辑&保存' : '新增&保存'"
+        width="800"
+        min-width="600"
+        min-height="300"
+        :loading="submitLoading"
+        resize
+        destroy-on-close
+      >
+        <template #default>
+          <vxe-form
+            :data="formData"
+            :rules="formRules"
+            title-align="right"
+            title-width="100"
+            @submit="submitEvent"
+          >
+            <vxe-form-item
+              field="name"
+              title="姓名"
+              :span="12"
+              :item-render="{}"
             >
-            <el-button
-              size="default"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-              >Delete</el-button
+              <template #default="{ data }">
+                <vxe-input
+                  v-model="data.name"
+                  placeholder="请输入姓名"
+                ></vxe-input>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item
+              field="sex"
+              title="性别"
+              :span="12"
+              :item-render="{}"
             >
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        class="pagination"
-        background="white"
-        layout="prev, pager, next"
-        :total="100"
-      />
+              <template #default="{ data }">
+                <vxe-select v-model="data.sex" transfer>
+                  <vxe-option
+                    v-for="item in stateList"
+                    :key="item.value"
+                    :value="item.value"
+                    :label="item.label"
+                  ></vxe-option>
+                </vxe-select>
+              </template>
+            </vxe-form-item>
+
+            <vxe-form-item
+              field="age"
+              title="年龄"
+              :span="12"
+              :item-render="{}"
+            >
+              <template #default="{ data }">
+                <vxe-input
+                  v-model="data.age"
+                  placeholder="请输入年龄"
+                ></vxe-input>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item
+              field="phone"
+              title="联系方式"
+              :span="12"
+              :item-render="{}"
+            >
+              <template #default="{ data }">
+                <vxe-input
+                  v-model="data.phone"
+                  placeholder="请输入联系电话"
+                ></vxe-input>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item
+              field="department"
+              title="所属部门"
+              :span="12"
+              :item-render="{}"
+            >
+              <template #default="{ data }">
+                <vxe-input
+                  v-model="data.department"
+                  placeholder="请输入所属部门"
+                ></vxe-input>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item
+              field="position"
+              title="职位"
+              :span="12"
+              :item-render="{}"
+            >
+              <template #default="{ data }">
+                <vxe-input
+                  v-model="data.position"
+                  placeholder="请输入职位"
+                ></vxe-input>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item
+              field="reason"
+              title="离职原因"
+              :span="12"
+              :item-render="{}"
+            >
+              <template #default="{ data }">
+                <vxe-input
+                  v-model="data.reason"
+                  placeholder="请输入离职原因"
+                ></vxe-input>
+              </template>
+            </vxe-form-item>
+            <vxe-form-item align="center" title-align="left" :span="24">
+              <template #default>
+                <vxe-button type="submit">提交</vxe-button>
+                <vxe-button type="reset">重置</vxe-button>
+              </template>
+            </vxe-form-item>
+          </vxe-form>
+        </template>
+      </vxe-modal>
+
+      <vxe-pager
+        background
+        v-model:current-page="pageVO2.currentPage"
+        v-model:page-size="pageVO2.pageSize"
+        :total="pageVO2.total"
+        :layouts="[
+          'Home',
+          'PrevPage',
+          'JumpNumber',
+          'NextPage',
+          'End',
+          'Sizes',
+          'FullJump',
+          'Total',
+        ]"
+        @page-change="pageChangeEvent2"
+      >
+      </vxe-pager>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref, onMounted } from "vue";
-import { reactive } from "vue";
-import { fixedList } from "../api/user.js";
-
-const formInline = reactive({
-  user: "",
-  region: "",
-  date: "",
+import { reactive, ref, onMounted, inject } from "vue";
+import { VXETable } from "vxe-table";
+import { fixedList } from "../api/fixed.js";
+let key = inject("key");
+const xTable = ref();
+const list = ref();
+const formData = reactive({
+  name: "",
+  sex: "",
+  age: "",
+  phone: "",
+  department: "",
+  position: "",
+  reason: "",
 });
-
-const onSubmit = () => {
-  console.log("submit!");
+const submitLoading = ref(false);
+const showEdit = ref(false);
+const selectRow = ref();
+const tableData = ref([]);
+const stateList = ref([
+  { label: "男", value: "男" },
+  { label: "女", value: "女" },
+]);
+const formRules = reactive({
+  name: [
+    {
+      required: true,
+      message: "请输入姓名",
+    },
+  ],
+  sex: [
+    {
+      required: true,
+      message: "请选择性别",
+    },
+  ],
+  age: [
+    {
+      required: true,
+      message: "请输入年龄",
+    },
+  ],
+  phone: [
+    {
+      required: true,
+      message: "请输入联系电话",
+    },
+  ],
+  department: [
+    {
+      required: true,
+      message: "请输入所属部门",
+    },
+  ],
+  position: [
+    {
+      required: true,
+      message: "请输入职位",
+    },
+  ],
+  reason: [
+    {
+      required: true,
+      message: "请输入薪资",
+    },
+  ],
+});
+const insertEvent = () => {
+  selectRow.value = null;
+  showEdit.value = true;
 };
-const search = ref("");
-const filterTableData = computed(() =>
-  tableData.value.filter(
-    (data) =>
-      !search.value ||
-      data.name.toLowerCase().includes(search.value.toLowerCase())
-  )
-);
-const handleEdit = (index, row) => {
-  console.log(index, row);
+const editEvent = (row) => {
+  Object.assign(formData, row);
+  selectRow.value = row;
+  showEdit.value = true;
 };
-const handleDelete = (index, row) => {
-  console.log(index, row);
+const cellDBLClickEvent = ({ row }) => {
+  editEvent(row);
 };
-let tableData = ref([]);
+const removeEvent = async (row) => {
+  const type = await VXETable.modal.confirm("您确定要删除该数据?");
+  if (type === "confirm") {
+    const data = await leavesDelete(row);
+    if (data.code === "200") {
+      VXETable.modal.message({ content: "删除成功", status: "success" });
+      key.value++;
+    }
+  }
+};
+const submitEvent = async () => {
+  submitLoading.value = true;
+  if (selectRow.value) {
+    const data = await leavesEdit(formData);
+    if (data.code === "200") {
+      submitLoading.value = false;
+      showEdit.value = false;
+      VXETable.modal.message({ content: "修改成功", status: "success" });
+      key.value++;
+    }
+  } else {
+    const data = await leavesAdd(formData);
+    if (data.code === "200") {
+      submitLoading.value = false;
+      showEdit.value = false;
+      VXETable.modal.message({ content: "添加成功", status: "success" });
+      key.value++;
+    }
+  }
+};
 onMounted(async () => {
   const { data } = await fixedList();
-  tableData.value = data;
+  tableData.value = data.slice(0, pageVO2.pageSize - 1);
+  pageVO2.total = data.length;
+  console.log("数据", data);
 });
+const pageVO2 = reactive({
+  currentPage: 1,
+  pageSize: 10,
+  total: 0,
+});
+const pageChangeEvent2 = () => {
+  tableData.value = list.value.slice(
+    (pageVO2.currentPage - 1) * pageVO2.pageSize,
+    pageVO2.currentPage * pageVO2.pageSize
+  );
+};
 </script>
+
 <style lang="less" scoped>
-.fixed-container {
+.container {
   height: cal(100vh-60px);
   padding: 20px;
   border-radius: 5px;
-  .fixed-form {
-    height: 230px;
-  }
-  .fixed-table {
-    position: relative;
-    height: 500px;
-    background: #fff;
-    .pagination {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-    }
-  }
 }
-
-.demo-form-inline .el-input {
-  --el-input-width: 400px;
-}
-
-.demo-form-inline .el-select {
-  --el-select-width: 400px;
+:deep(.vxe-cell) {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

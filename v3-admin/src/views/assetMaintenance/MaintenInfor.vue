@@ -14,4 +14,5 @@ import Table from '../../components/Table.vue'
   padding: 20px;
   border-radius: 5px;
 }
+
 </style>

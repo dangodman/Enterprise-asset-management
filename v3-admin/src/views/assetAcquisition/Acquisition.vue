@@ -295,6 +295,7 @@ const submitEvent = async () => {
 };
 onMounted(async () => {
   const { data } = await acquisitionList();
+  list.value = data;
   tableData.value = data.slice(0, pageVO2.pageSize - 1);
   pageVO2.total = data.length;
   console.log("数据", data);
@@ -317,5 +318,11 @@ const pageChangeEvent2 = () => {
   height: cal(100vh-60px);
   padding: 20px;
   border-radius: 5px;
+}
+:deep(.vxe-cell) {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
